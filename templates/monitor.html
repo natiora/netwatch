@@ -1,0 +1,15 @@
+{% extends "base.html" %}{% block title %}{{m.name}} — NetWatch{% endblock %}{% block content %}
+<div class="top"><div><h1>{{m.name}}</h1><div class="muted">{{m.target}} · {{m.kind.upper()}} · {{m.group_name}}</div></div><a class="btn gray" href="/">← Dashboard</a></div>
+<div class="grid"><div class="card"><div class="muted">Disponibilité</div><div class="metric green">{{uptime}}%</div></div><div class="card"><div class="muted">Packet loss</div><div class="metric red">{{loss}}%</div></div><div class="card"><div class="muted">Latence moyenne</div><div class="metric blue">{{avg}} ms</div></div><div class="card"><div class="muted">Intervalle</div><div class="metric">{{m.interval}}s</div></div></div>
+<div class="detailgrid" style="margin-top:17px"><div class="card"><h2>Latence — 24 heures</h2><div class="chart"><canvas id="chart"></canvas></div></div>
+<div class="card"><h2>Informations</h2><p><span class="muted">Description</span><br>{{m.description or "—"}}</p><p><span class="muted">Créé</span><br>{{m.created_at}}</p><p><span class="muted">État</span><br>{% if m.enabled %}<span class="green">Monitoring actif</span>{% else %}<span class="muted">En pause</span>{% endif %}</p></div></div>
+<div class="card" style="margin-top:17px"><h2>Historique récent</h2><table><thead><tr><th>Date</th><th>Statut</th><th>Latence</th><th>Détail</th></tr></thead><tbody>
+{% for x in rows %}<tr><td>{{x.checked_at|dt}}</td><td>{% if x.status %}<span class="green">UP</span>{% else %}<span class="red">DOWN</span>{% endif %}</td><td>{{x.latency_ms or "—"}}{% if x.latency_ms %} ms{% endif %}</td><td class="muted">{{x.detail}}</td></tr>{% endfor %}</tbody></table></div>
+<script>
+fetch('/api/monitor/{{m.id}}/history?hours=24').then(r=>r.json()).then(d=>{
+ const ctx=document.getElementById('chart');
+ new Chart(ctx,{type:'line',data:{labels:d.map(x=>{const t=new Date(x.checked_at),f=z=>new Intl.DateTimeFormat('fr-FR',{timeZone:z,hour:'2-digit',minute:'2-digit'}).format(t);return [f('Europe/Paris')+' Paris',f('Etc/GMT-3')+' UTC+3']}),datasets:[{label:'Latence (ms)',data:d.map(x=>x.latency_ms),tension:.3,spanGaps:true}]},
+ options:{responsive:true,maintainAspectRatio:false,scales:{y:{beginAtZero:true}}}});
+});
+</script>
+{% endblock %}

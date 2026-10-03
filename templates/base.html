@@ -1,0 +1,18 @@
+<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>{% block title %}NetWatch{% endblock %}</title><script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#080d18;color:#e6edf7;font-family:Inter,system-ui,Arial}.layout{display:flex;min-height:100vh}
+aside{width:240px;background:#0e1625;border-right:1px solid #1e2a3d;padding:25px 15px}.logo{font-size:24px;font-weight:900;padding:0 12px 30px}.logo b{color:#5da9ff}
+nav a{display:block;color:#91a0b5;padding:12px 14px;margin:4px 0;border-radius:10px}nav a:hover{background:#192437;color:#fff}
+main{flex:1;padding:30px;max-width:1600px}.top{display:flex;justify-content:space-between;gap:20px;align-items:center;margin-bottom:22px}h1{margin:0;font-size:29px}h2{font-size:18px}.muted{color:#8d9aae}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:15px}.card{background:#0e1625;border:1px solid #1e2a3d;border-radius:14px;padding:20px}.metric{font-size:30px;font-weight:850;margin-top:8px}
+.green{color:#35d49a}.red{color:#ff6b7d}.blue{color:#64a7ff}.yellow{color:#f4c95d}.btn{background:#2878e8;color:white;border:0;border-radius:9px;padding:10px 14px;font-weight:700;cursor:pointer}.btn.redbg{background:#7f2634}.btn.gray{background:#344258}
+table{width:100%;border-collapse:collapse}th,td{padding:14px;border-bottom:1px solid #1e2a3d;text-align:left}th{font-size:11px;color:#8d9aae;text-transform:uppercase}
+.dot{display:inline-block;width:9px;height:9px;border-radius:50%;background:#64748b;margin-right:8px}.dot.up{background:#35d49a}.dot.down{background:#ff6b7d}
+.badge{padding:5px 8px;background:#1a2638;border-radius:7px;font-size:11px}.actions{display:flex;gap:6px}.chart{height:330px}.formgrid{display:grid;grid-template-columns:1fr 1.4fr .8fr .6fr 1fr 1.5fr auto;gap:10px;align-items:end}
+label{font-size:12px;color:#9ba8ba}input,select{width:100%;padding:11px;margin-top:6px;border:1px solid #304057;background:#09111e;color:#fff;border-radius:9px}
+.filters{display:flex;gap:10px;margin-bottom:14px}.filters input{max-width:350px}.detailgrid{display:grid;grid-template-columns:2fr 1fr;gap:16px}
+@media(max-width:1000px){aside{width:70px}.logo{font-size:0}.logo b{font-size:20px}nav a{font-size:0}nav a:first-letter{font-size:20px}.grid{grid-template-columns:repeat(2,1fr)}.formgrid,.detailgrid{grid-template-columns:1fr}.main{padding:18px}}
+a,a:hover{text-decoration:none}
+</style></head><body><div class="layout"><aside><div class="logo">Net<b>Watch</b></div><nav>
+<a href="/">🏠 Dashboard</a><a href="/admin">⚙️ Administration</a><a href="/logout">↪ Déconnexion</a></nav></aside><main>{% block content %}{% endblock %}</main></div></body></html>

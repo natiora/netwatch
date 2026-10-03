@@ -1,0 +1,11 @@
+{% extends "base.html" %}{% block title %}Dashboard — NetWatch{% endblock %}{% block content %}
+<div class="top"><div><h1>Dashboard</h1><div class="muted">Surveillance de votre infrastructure</div></div><a class="btn" href="/admin">+ Nouvelle cible</a></div>
+<div class="grid"><div class="card"><div class="muted">Cibles</div><div class="metric">{{total}}</div></div><div class="card"><div class="muted">UP</div><div class="metric green">{{up}}</div></div><div class="card"><div class="muted">DOWN</div><div class="metric red">{{down}}</div></div><div class="card"><div class="muted">Latence moyenne</div><div class="metric blue">{{avg}} ms</div></div></div>
+<div class="card" style="margin-top:17px"><div class="top" style="margin-bottom:8px"><h2>Monitoring</h2><div class="muted">Mise à jour automatique toutes les 30 secondes</div></div>
+<div class="filters"><input id="search" placeholder="Rechercher une cible..." oninput="filterRows()"></div>
+<table id="tbl"><thead><tr><th>Nom</th><th>Cible</th><th>Type</th><th>État</th><th>Latence</th><th>Dernier check</th><th></th></tr></thead><tbody>
+{% for m in monitors %}<tr><td><b>{{m.name}}</b></td><td>{{m.target}}</td><td><span class="badge">{{m.kind.upper()}}</span></td><td><span class="dot {% if m.status==1 %}up{% elif m.status==0 %}down{% endif %}"></span>{% if m.status==1 %}<span class="green">UP</span>{% elif m.status==0 %}<span class="red">DOWN</span>{% else %}<span class="muted">WAIT</span>{% endif %}</td><td>{{m.latency_ms or "—"}}{% if m.latency_ms %} ms{% endif %}</td><td class="muted">{{m.checked_at|dt}}</td><td><a class="btn gray" href="/monitor/{{m.id}}">Détails</a></td></tr>{% endfor %}
+{% if not monitors %}<tr><td colspan="7" class="muted">Aucune cible. Ajoutez-en une dans Administration.</td></tr>{% endif %}</tbody></table></div>
+<script>function filterRows(){let q=document.getElementById('search').value.toLowerCase();document.querySelectorAll('#tbl tbody tr').forEach(r=>r.style.display=r.innerText.toLowerCase().includes(q)?'':'none')}</script>
+<script>async function tick(){try{const r=await fetch('/api/run',{method:'POST'});const d=await r.json();if(d.checked>0)location.reload()}catch(e){}}tick();setInterval(tick,30000)</script>
+{% endblock %}
