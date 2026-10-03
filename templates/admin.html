@@ -1,0 +1,12 @@
+{% extends "base.html" %}{% block title %}Administration — NetWatch{% endblock %}{% block content %}
+<div class="top"><div><h1>Administration</h1><div class="muted">Gérez les IP, URL et services surveillés.</div></div></div>
+<div class="card"><h2>Ajouter une cible</h2><form method="post" action="/admin/add" class="formgrid">
+<div><label>Nom</label><input name="name" placeholder="LAB-01" required></div><div><label>IP / URL / host:port</label><input name="target" placeholder="10.10.23.1" required></div>
+<div><label>Type</label><select name="kind"><option value="http">HTTP/HTTPS</option><option value="tcp">TCP</option></select></div>
+<div><label>Intervalle</label><input name="interval" type="number" value="30" min="10" max="3600"></div>
+<div><label>Groupe</label><input name="group_name" value="Default"></div><div><label>Description</label><input name="description" placeholder="Routeur principal"></div><button class="btn">Ajouter</button>
+</form></div>
+<div class="card" style="margin-top:17px"><h2>Cibles</h2><table><thead><tr><th>Nom</th><th>Cible</th><th>Type</th><th>Groupe</th><th>Intervalle</th><th>État</th><th>Actions</th></tr></thead><tbody>
+{% for m in monitors %}<tr><td><b>{{m.name}}</b></td><td>{{m.target}}</td><td>{{m.kind.upper()}}</td><td>{{m.group_name}}</td><td>{{m.interval}}s</td><td>{% if m.enabled %}<span class="green">ACTIF</span>{% else %}<span class="muted">PAUSE</span>{% endif %}</td><td class="actions"><form method="post" action="/admin/toggle/{{m.id}}"><button class="btn gray">{{"Pause" if m.enabled else "Activer"}}</button></form><form method="post" action="/admin/delete/{{m.id}}" onsubmit="return confirm('Supprimer cette cible et son historique ?')"><button class="btn redbg">Supprimer</button></form></td></tr>
+{% else %}<tr><td colspan="7" class="muted">Aucune cible.</td></tr>{% endfor %}</tbody></table></div>
+{% endblock %}
